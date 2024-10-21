@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 
 function Login() {
-  const navigate = useNavigate(); // Initialize the navigation hook
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(""); // For showing login error messages
+  const [error, setError] = useState("");
 
   const handleLoginClick = async (e) => {
     e.preventDefault(); // Prevent form submission behavior
@@ -20,8 +20,8 @@ function Login() {
     };
 
     try {
-      // Send a POST request to the server to verify the credentials
-      const response = await fetch("http://localhost:3001/login", { // Adjusted to the server's URL and port
+      // POST na server či je aktivny (na databazu)
+      const response = await fetch("http://localhost:3001/login", { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -32,14 +32,15 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        // Login successful, navigate to the main page
+        localStorage.setItem("isAuthenticated", "true"); // pri spravnom logine nastavi na true(z dovodu aby si clovek nemohol dat len /Main do url)
         navigate("/Main");
-      } else {
-        // If login fails, display the error message
-        setError(data.message || "Login failed. Please try again.");
+      }
+       else {
+        // pri zlom logine 
+        setError(data.message || "Nesprávne meno alebo heslo");
       }
     } catch (err) {
-      // Handle fetch or network errors
+      // fetch alebo network error
       setError("An error occurred. Please try again.");
     }
   };

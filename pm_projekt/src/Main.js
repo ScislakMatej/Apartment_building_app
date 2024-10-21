@@ -1,7 +1,18 @@
 import React from "react";
-import "./Main.css"; // Import the CSS file
+import { useNavigate } from "react-router-dom";
+import "./Main.css"; 
 
 function Main() {
+  const navigate = useNavigate(); 
+
+  // Funkcia na logout
+  const handleLogout = () => {
+    // na odhlasenie vyčistí storage ktoru naplnilo v Login.js pri response
+    localStorage.removeItem("isAuthenticated");
+
+    // Redirect na login page
+    navigate("/");
+  };
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
@@ -32,6 +43,9 @@ function Main() {
           <span>Erik Lakatoš</span>
           <span>3.p</span>
           <span>Byt č. 7</span>
+          <button className="logout-button" onClick={handleLogout}>
+            Log out
+          </button>
         </div>
 
         <div className="dashboard-body">
