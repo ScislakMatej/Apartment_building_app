@@ -86,7 +86,47 @@ app.post('/login', async (req, res) => {
 });
 
 // Spustenie servera
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => {
     console.log(`Server beží na http://localhost:${PORT}`);
 });
+
+
+//* -------------------------------------UPRATOVANIE V BYTOVKE----------------------------------- */
+// Funkcia pre získanie údajov z databázy
+async function getClenoviaData() {
+    try {
+        if (!pool) {
+            throw new Error("Databázové pripojenie nie je dostupné");
+        }
+        const request = pool.request();
+        const result = await request.query(`
+            SELECT id_clena, meno, priezvisko
+            FROM dbo.clenovia_bytovky
+            WHERE id_clena BETWEEN 2 AND 31
+            ORDER BY id_clena;
+        `);
+        return result.recordset;
+    } catch (err) {
+        console.error('Chyba pri načítaní údajov z databázy:', err);
+        return []; // Vráti prázdne pole v prípade chyby
+    }
+}
+
+
+
+// Route na získanie údajov o členoch
+app.get('/api/clenovia', async (req, res) => {
+    try {
+        const clenovia = await getClenoviaData();
+        console.log('Returned data:', clenovia); // Loguj dáta, ktoré sú vracané
+        res.json(clenovia);
+    } catch (error) {
+        console.error('Chyba pri načítaní údajov:', error);
+        res.status(500).json({ message: 'Chyba pri načítaní údajov', error });
+    }
+});
+
+
+
+
