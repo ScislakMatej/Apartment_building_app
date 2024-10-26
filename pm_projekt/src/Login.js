@@ -21,7 +21,7 @@ function Login() {
 
     try {
       // POST na server či je aktivny (na databazu)
-      const response = await fetch("http://localhost:3001/login", { 
+      const response = await fetch("http://localhost:3003/login", { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
