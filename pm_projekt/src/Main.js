@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import "./Main.css"; 
+import ProblemsBox from './ProblemsBox';
+
+
 
 function Main() {
   const navigate = useNavigate(); 
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    // Fetch user data from localStorage
+    // Vytiahnutie user dat z lokal uloziska
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setUser(storedUser);
     } else {
-      navigate("/"); // Redirect if no user data is found
+      navigate("/"); // Redirect ak nie su najdene data
     }
   }, [navigate]);
 
@@ -24,6 +27,8 @@ function Main() {
     // Redirect na login page
     navigate("/");
   };
+
+  
 
   return (
     <div className="dashboard-container">
@@ -85,20 +90,10 @@ function Main() {
             </ul>
           </div>
 
-          <div className="problems-box">
-            <div className="problems-header">
-              <h3>Problémy</h3>
-              <button className="add-btn">
-                <img src="./Add.svg" alt="User Icon" className="add-icon" />
-              </button>
-            </div>
-            <hr />
-            <ul className="problems-list">
-              <li>Svetlo vo výťahu nesvieti</li>
-              <li>Nezvládam to psychicky</li>
-              <li>Smrad v kočikárni</li>
-            </ul>
-          </div>
+          
+          {/* Komponenta pre zobrazenie problémov */}
+          <ProblemsBox />
+
         </div>
       </div>
     </div>

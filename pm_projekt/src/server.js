@@ -10,42 +10,40 @@ dotenv.config();
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Allow CORS requests from all origins
+app.use(cors()); // CORS policy
 
 app.use(express.static(path.join(__dirname, 'src')));
 
-// Database configuration for SQL Server (Azure)
+// Konifg databazy
 const dbConfig = {
     user: process.env.DB_USER || 'Admin1',
     password: process.env.DB_PASSWORD || 'PMprojekt1',
     server: process.env.DB_HOST || 'pm-server-database.database.windows.net',  // Azure SQL Server host
     database: process.env.DB_NAME || 'PM_database',
     options: {
-        encrypt: true, // Use encryption for Azure SQL
-        trustServerCertificate: true // Necessary if you're connecting with SSL
+        encrypt: true, // encryption
+        trustServerCertificate: true // potrebne pre ssl 
     }
 };
 
-// Define pool variable
+// defin pool variablu
 let pool;
 
-// Connect to SQL Server
+// pripojenie na sql server
 sql.connect(dbConfig).then(p => {
-    pool = p;  // Assign the connected pool to the variable
+    pool = p;  // pridanie k pirpojenemu poolu
     if (pool.connected) {
         console.log('Pripojený k SQL databáze (Azure)');
     }
 }).catch(err => {
     console.error('Nepodarilo sa pripojiť k databáze:', err);
-    process.exit(1); // Exit if connection fails
+    process.exit(1); // Koniec ak nepripojilo
 });
 
 //* -------------------------------------PRIHLASENIE POUZIVATELA ----------------------------------- */
 // Route pre login
 app.post('/login', async (req, res) => {
     const { name, password } = req.body;
-
-    console.log('Login request data:', req.body); // Log the request data
 
     if (!name || !password) {
         return res.status(400).json({ message: 'Prosím zadajte používateľské meno a heslo.' });
@@ -65,11 +63,10 @@ app.post('/login', async (req, res) => {
 
         const user = result.recordset[0];
 
-        // Make sure you include all necessary fields in the response
         res.json({
             message: 'Prihlásenie úspešné',
             user: { 
-                id: user.id,               // Ensure id exists in your database and is being selected
+                id: user.id,
                 meno: user.meno,
                 priezvisko: user.priezvisko,
                 cislo_bytu: user.cislo_bytu 
@@ -123,6 +120,60 @@ app.get('/api/clenovia', async (req, res) => {
         res.status(500).json({ message: 'Chyba pri načítaní údajov', error });
     }
 });
+
+//* ------------------------------------- Tasky ----------------------------------- */
+// Route na tasky
+// Route aby vytiahlo problemy ktore nie su spravene(je_spravene = 0)
+app.get('/api/problems', async (req, res) => {
+    try {
+        const result = await pool.request().query('SELECT * FROM udrzba WHERE je_spravene = 0');
+        res.json(result.recordset);
+    } catch (error) {
+        console.error('Error fetching problems:', error);
+        res.status(500).json({ message: 'Error fetching problems', error });
+    }
+});
+
+
+// Route na pridanie tasku
+app.post('/api/problems', async (req, res) => {
+    const { problem } = req.body;
+    if (!problem) return res.status(400).json({ message: 'Je potrebne zadať opis problému' });
+
+    try {
+        const result = await pool.request()
+            .input('problem', sql.Text, problem)
+            .query('INSERT INTO udrzba (problem) OUTPUT INSERTED.* VALUES (@problem)');
+        res.status(201).json(result.recordset[0]);
+    } catch (error) {
+        console.error('Error adding task:', error);
+        res.status(500).json({ message: 'Error adding task', error });
+    }
+});
+
+// Cesta na zmenu je_spravene z 0 na 1
+app.put('/api/problems/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const request = pool.request();
+        request.input('id', sql.Int, id);
+
+        // Update je_spravene na 1
+        const result = await request.query('UPDATE udrzba SET je_spravene = 1 WHERE id = @id');
+
+        if (result.rowsAffected[0] > 0) {
+            res.json({ message: 'Problem je vyriešený.' });
+        } else {
+            res.status(404).json({ message: 'Problem nebol nájdený.' });
+        }
+    } catch (error) {
+        console.error('Error updating task status:', error);
+        res.status(500).json({ message: 'Error updating task status', error });
+    }
+});
+
+
 
 
 
