@@ -43,47 +43,44 @@ sql.connect(dbConfig).then(p => {
 //* -------------------------------------PRIHLASENIE POUZIVATELA ----------------------------------- */
 // Route pre login
 app.post('/login', async (req, res) => {
-    const { name, password } = req.body;  // Získame údaje z tela požiadavky
+    const { name, password } = req.body;
 
-    // Skontrolujeme, či name a password boli poskytnuté
+    console.log('Login request data:', req.body); // Log the request data
+
     if (!name || !password) {
         return res.status(400).json({ message: 'Prosím zadajte používateľské meno a heslo.' });
     }
 
     try {
-        // SQL dotaz na SQL Server (Azure) - hľadáme podľa 'meno'
-        const sqlQuery = `SELECT * FROM clenovia_bytovky WHERE meno = @meno`;  // Hľadáme podľa 'meno'
-
-        // Create a request to execute the query
+        const sqlQuery = `SELECT * FROM clenovia_bytovky WHERE meno = @meno AND heslo = @heslo`;
         const request = pool.request();
-        request.input('meno', sql.NVarChar, name);  // Bind parameter
+        request.input('meno', sql.NVarChar, name);
+        request.input('heslo', sql.NVarChar, password);
 
-        // Execute query
         const result = await request.query(sqlQuery);
         
         if (result.recordset.length === 0) {
-            // Používateľ neexistuje
             return res.status(401).json({ message: 'Nesprávne používateľské meno alebo heslo.' });
         }
 
         const user = result.recordset[0];
 
-        // Porovnáme heslá
-        if (user.heslo === password) {  // Check against 'heslo'
-            // Heslo je správne
-            res.json({
-                message: 'Prihlásenie úspešné',
-                user: { id: user.id, meno: user.meno }
-            });
-        } else {
-            // Nesprávne heslo
-            res.status(401).json({ message: 'Nesprávne používateľské meno alebo heslo.' });
-        }
+        // Make sure you include all necessary fields in the response
+        res.json({
+            message: 'Prihlásenie úspešné',
+            user: { 
+                id: user.id,               // Ensure id exists in your database and is being selected
+                meno: user.meno,
+                priezvisko: user.priezvisko,
+                cislo_bytu: user.cislo_bytu 
+            }
+        });
     } catch (error) {
         console.error('Chyba servera pri spracovaní požiadavky:', error);
         res.status(500).json({ message: 'Chyba servera', error: error });
     }
 });
+
 
 // Spustenie servera
 const PORT = process.env.PORT || 3003;

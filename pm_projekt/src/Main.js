@@ -4,6 +4,17 @@ import "./Main.css";
 
 function Main() {
   const navigate = useNavigate(); 
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    // Fetch user data from localStorage
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    } else {
+      navigate("/"); // Redirect if no user data is found
+    }
+  }, [navigate]);
 
   // Funkcia na logout
   const handleLogout = () => {
@@ -37,9 +48,8 @@ function Main() {
 
       <div className="main-content">
         <div className="header">
-          <span>Erik Lakatoš</span>
-          <span>3.p</span>
-          <span>Byt č. 7</span>
+          <span>{user.meno} {user.priezvisko}</span>
+          <span>Byt č. {user.cislo_bytu}</span>
           <button className="logout-button" onClick={handleLogout}>
             Log out
           </button>
@@ -111,7 +121,7 @@ function TasksBox() {
             return res.json(); // Získaj JSON
         })
         .then((data) => {
-            console.log('Parsed Data:', data);
+            //console.log('Parsed Data:', data);
             setClenovia(data);
         })
         .catch((err) => console.error('Error:', err));

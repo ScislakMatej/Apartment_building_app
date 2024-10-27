@@ -33,6 +33,8 @@ function Login() {
 
       if (response.ok) {
         localStorage.setItem("isAuthenticated", "true"); // pri spravnom logine nastavi na true(z dovodu aby si clovek nemohol dat len /Main do url)
+        localStorage.setItem("user", JSON.stringify(data.user));
+        console.log('Login user data:', data.user); 
         navigate("/Main");
       }
        else {
