@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Main.css"; 
-import ProblemsBox from './ProblemsBox';
-import TasksBox from './TasksBox';
-
-
+import "./Main.css";
+import ProblemsBox from "./ProblemsBox";
+import TasksBox from "./TasksBox";
+import InvoiceModal from "./InvoiceModal";
 
 function Main() {
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -28,8 +27,11 @@ function Main() {
     // Redirect na login page
     navigate("/");
   };
-
-  
+  {
+    /* logika pre box s fakturami */
+  }
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   return (
     <div className="dashboard-container">
@@ -38,26 +40,32 @@ function Main() {
         <p className="sidebar-address">Podivínska 12 Košice</p>
         <nav className="nav-links">
           <a href="#" className="nav-item">
-            <div className="nav-icon">
-              <img src="./Home.svg" alt="Home Icon" className="add-icon" />
+            <div className="nav-button">
+              <img src="./Home.svg" alt="Home Icon" className="nav-icon" />
             </div>
             <span>Home</span>
           </a>
           <a href="?" className="nav-item">
-            <div className="nav-icon">
-              <img src="./Calendar.svg" alt="Calendar Icon" className="add-icon" />
+            <div className="nav-button">
+              <img
+                src="./Document.svg"
+                alt="Document Icon"
+                className="nav-icon"
+              />
             </div>
-            <span>Kalendár</span>
+            <span>Dokumenty</span>
           </a>
         </nav>
       </div>
 
       <div className="main-content">
         <div className="header">
-          <span>{user.meno} {user.priezvisko}</span>
+          <span>
+            {user.meno} {user.priezvisko}
+          </span>
           <span>Byt č. {user.cislo_bytu}</span>
           <button className="logout-button" onClick={handleLogout}>
-            Log out
+            <img src="./Logout.svg" alt="Logout" className="logout-icon" />
           </button>
         </div>
 
@@ -65,7 +73,7 @@ function Main() {
           <div className="account-box">
             <div className="account-header">
               <h3>Stav uctu: 5824,58€</h3>
-              <button className="add-btn">
+              <button className="add-btn" onClick={toggleModal}>
                 <img src="./Add.svg" alt="User Icon" className="add-icon" />
               </button>
             </div>
@@ -91,20 +99,14 @@ function Main() {
             </ul>
           </div>
 
-          
           {/* Komponenta pre zobrazenie problémov */}
           <ProblemsBox />
-
         </div>
       </div>
+      {/* Komponent pre zobrazenie sumbmit boxy pre faktury */}
+      <InvoiceModal isOpen={isModalOpen} toggleModal={toggleModal} />
     </div>
   );
 }
-
-
-  
-  
-
-
 
 export default Main;
