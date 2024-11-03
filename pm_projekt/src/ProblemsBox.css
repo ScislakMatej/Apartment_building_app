@@ -1,0 +1,69 @@
+.problems-box {
+  background-color: #f0f0f0;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.problems-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.problems-header h3 {
+  margin: 0;
+}
+
+.new-problem {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Space between input and button */
+}
+
+.input-problem {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  outline: none;
+  height: 15px;
+}
+
+.add-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.add-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.problems-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+}
+
+.problem-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.delete-icon {
+  width: 24px;
+  height: 24px;
+}

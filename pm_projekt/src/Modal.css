@@ -1,0 +1,136 @@
+.modal-content {
+  background: #ededed;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1001; /*Na vrchu*/
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6); /*Semi-priehladne BG*/
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000; /*Na vrchu*/
+}
+
+.input-description {
+  width: 95%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #dbdbdb;
+  margin-top: 8px;
+}
+
+.input-date {
+  width: 95%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #dbdbdb;
+  margin-top: 4px;
+}
+
+.input-price {
+  width: 95%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #dbdbdb;
+  margin-top: 8px;
+}
+
+.input-supplier-id {
+  width: 95%;
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #dbdbdb;
+  margin-top: 8px;
+}
+
+.input-upload {
+  /* width: 95%; */
+  padding: 8px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #dbdbdb;
+  margin-top: 8px;
+}
+
+.submit-btn {
+  padding: 10px 20px;
+  background-color: #263268;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.submit-btn:hover {
+  background-color: #4053ac;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+/* hide default file input */
+.input-upload {
+  display: none;
+}
+
+.custom-upload-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.upload-icon {
+  width: 24px;
+  height: 24px;
+  color: #333;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.tooltip {
+  position: fixed;
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 18px;
+  white-space: nowrap;
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
