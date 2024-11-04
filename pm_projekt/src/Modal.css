@@ -96,6 +96,15 @@
   display: none;
 }
 
+.input-field {
+  width: 95%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #dbdbdb;
+  margin-bottom: 10px;
+}
+
 .custom-upload-button {
   display: inline-flex;
   align-items: center;
@@ -133,4 +142,28 @@
   z-index: 10;
   pointer-events: none;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.add-answer-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: #dbdbdbdb;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.add-answer-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.faktury-modal .modal-content {
+}
+
+.hlasovanie-modal .modal-content {
 }

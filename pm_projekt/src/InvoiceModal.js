@@ -13,7 +13,10 @@ function InvoiceModal({ isOpen, toggleModal }) {
 
   return (
     <div className="modal-overlay" onClick={toggleModal}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="modal-content faktury-modal"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2>Pridať uhradenú faktúru</h2>
         <form>
           <label>

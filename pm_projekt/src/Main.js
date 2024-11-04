@@ -4,10 +4,14 @@ import "./Main.css";
 import ProblemsBox from "./ProblemsBox";
 import TasksBox from "./TasksBox";
 import InvoiceModal from "./InvoiceModal";
+import NewVoteModal from "./NewVoteModal";
 
 function Main() {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
+
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
 
   useEffect(() => {
     // Vytiahnutie user dat z lokal uloziska
@@ -27,12 +31,16 @@ function Main() {
     // Redirect na login page
     navigate("/");
   };
-  {
-    /* logika pre box s fakturami */
-  }
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const toggleModal = () => setIsModalOpen(!isModalOpen);
 
+  // logika pre box s fakturami
+  const toggleInvoiceModal = () => {
+    setIsInvoiceModalOpen(!isInvoiceModalOpen);
+  };
+
+  // logika pre box s hlasovanim
+  const toggleVoteModal = () => {
+    setIsVoteModalOpen(!isVoteModalOpen);
+  };
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
@@ -73,8 +81,8 @@ function Main() {
           <div className="account-box">
             <div className="account-header">
               <h3>Stav uctu: 5824,58€</h3>
-              <button className="add-btn" onClick={toggleModal}>
-                <img src="./Add.svg" alt="User Icon" className="add-icon" />
+              <button className="add-btn" onClick={toggleInvoiceModal}>
+                <img src="./Add.svg" alt="Add Icon" className="add-icon" />
               </button>
             </div>
             <hr />
@@ -87,8 +95,8 @@ function Main() {
           <div className="voting-box">
             <div className="voting-header">
               <h3>Posledné hlasovanie</h3>
-              <button className="add-btn">
-                <img src="./Add.svg" alt="User Icon" className="add-icon" />
+              <button className="add-btn" onClick={toggleVoteModal}>
+                <img src="./Add.svg" alt="Add Vote" className="add-icon" />
               </button>
             </div>
             <hr />
@@ -104,7 +112,12 @@ function Main() {
         </div>
       </div>
       {/* Komponent pre zobrazenie sumbmit boxy pre faktury */}
-      <InvoiceModal isOpen={isModalOpen} toggleModal={toggleModal} />
+      <InvoiceModal
+        isOpen={isInvoiceModalOpen}
+        toggleModal={toggleInvoiceModal}
+      />
+      {/* Hlasovanie Modal */}
+      <NewVoteModal isOpen={isVoteModalOpen} toggleModal={toggleVoteModal} />
     </div>
   );
 }
