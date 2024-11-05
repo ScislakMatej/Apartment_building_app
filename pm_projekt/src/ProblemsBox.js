@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./ProblemsBox.css";
+
 function ProblemsBox() {
   const [problems, setProblems] = useState([]);
   const [newProblem, setNewProblem] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Vytiahnutie dat z databazy a jsonify
   useEffect(() => {
     fetch("http://localhost:3003/api/problems")
       .then((res) => res.json())
@@ -12,8 +13,12 @@ function ProblemsBox() {
       .catch((error) => console.error("Error fetching problems:", error));
   }, []);
 
-  // Add a new problem
   const addProblem = () => {
+    if (newProblem.trim() === "") {
+      setErrorMessage("Prosím, zadajte problém.");
+      return;
+    }
+
     fetch("http://localhost:3003/api/problems", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -21,13 +26,13 @@ function ProblemsBox() {
     })
       .then((res) => res.json())
       .then((addedProblem) => {
-        setProblems([...problems, addedProblem]); // Pridanie noveho problemu lokalne
-        setNewProblem(""); // Vyčistí input
+        setProblems([...problems, addedProblem]);
+        setNewProblem("");
+        setErrorMessage("");
       })
       .catch((error) => console.error("Error adding problem:", error));
   };
 
-  // označenie problemu za vybavený
   const markProblemAsCompleted = (id) => {
     const confirmDelete = window.confirm(
       "Určite chcete označiť problém za vyriešený?"
@@ -36,7 +41,7 @@ function ProblemsBox() {
 
     fetch(`http://localhost:3003/api/problems/${id}`, { method: "PUT" })
       .then(() => {
-        setProblems(problems.filter((problem) => problem.id !== id)); // Vymazanie z lokalneho uloziska
+        setProblems(problems.filter((problem) => problem.id !== id));
       })
       .catch((error) =>
         console.error("Error marking problem as completed:", error)
@@ -59,21 +64,24 @@ function ProblemsBox() {
             <img src="./Add.svg" alt="Add Icon" className="add-icon" />
           </button>
         </div>
+        {errorMessage && <span className="error-message">{errorMessage}</span>}
       </div>
       <hr />
-      <ul className="problems-list">
-        {problems.map((problem) => (
-          <li key={problem.id} className="problem-item">
-            <span>{problem.problem}</span>
-            <button
-              className="delete-btn"
-              onClick={() => markProblemAsCompleted(problem.id)}
-            >
-              <img src="./Trashcan.svg" alt="Vymazať" className="delete-icon" />
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="problems-list-container">
+        <ul className="problems-list">
+          {problems.map((problem) => (
+            <li key={problem.id} className="problem-item">
+              <span>{problem.problem}</span>
+              <button
+                className="delete-btn"
+                onClick={() => markProblemAsCompleted(problem.id)}
+              >
+                <img src="./Trashcan.svg" alt="Vymazať" className="delete-icon" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

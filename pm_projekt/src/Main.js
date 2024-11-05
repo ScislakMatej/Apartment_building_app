@@ -5,6 +5,7 @@ import ProblemsBox from "./ProblemsBox";
 import TasksBox from "./TasksBox";
 import InvoiceModal from "./InvoiceModal";
 import NewVoteModal from "./NewVoteModal";
+import VotingBox from "./VotingBox";
 
 function Main() {
   const navigate = useNavigate();
@@ -89,25 +90,11 @@ function Main() {
             <div className="account-graph">TU GRAF xdd</div>
           </div>
 
-          {/* Komponenta pre zobrazenie úloh */}
+          {/* Komponent pre zobrazenie uloh */}
           <TasksBox />
 
-          <div className="voting-box">
-            <div className="voting-header">
-              <h3>Posledné hlasovanie</h3>
-              <button className="add-btn" onClick={toggleVoteModal}>
-                <img src="./Add.svg" alt="Add Vote" className="add-icon" />
-              </button>
-            </div>
-            <hr />
-            <ul className="voting-results">
-              <li>Za: 4</li>
-              <li>Proti: 2</li>
-              <li>Nezucastnilo sa: 7</li>
-            </ul>
-          </div>
-
-          {/* Komponenta pre zobrazenie problémov */}
+          <VotingBox toggleVoteModal={toggleVoteModal} />
+          {/* Komponent pre zobrazenie problémov */}
           <ProblemsBox />
         </div>
       </div>

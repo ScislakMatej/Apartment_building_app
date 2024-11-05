@@ -1,0 +1,35 @@
+.voting-box {
+  background-color: #ededed;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: 200px;
+  overflow-y: auto;
+}
+
+.voting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.add-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.voting-results {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.voting-results li {
+  margin-bottom: 5px;
+}
