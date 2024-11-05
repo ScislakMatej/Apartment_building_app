@@ -19,7 +19,7 @@ body {
   background-color: #263268;
   color: #ededed;
   padding: 20px;
-  width: 150px;
+  width: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -198,5 +198,5 @@ td {
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #ededed;
 }
