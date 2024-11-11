@@ -5,43 +5,70 @@ import ProblemsBox from "./ProblemsBox";
 import TasksBox from "./TasksBox";
 import InvoiceModal from "./InvoiceModal";
 import NewVoteModal from "./NewVoteModal";
-import VotingBox from "./VotingBox";
+import VotingBox from "./VotingBox";  // Import VotingBox
 
 function Main() {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
-
+  
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
-
+  const [votes, setVotes] = useState([]);  // Stav pre hlasovania
+  
   useEffect(() => {
-    // Vytiahnutie user dat z lokal uloziska
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
       setUser(storedUser);
     } else {
-      navigate("/"); // Redirect ak nie su najdene data
+      navigate("/"); // Redirect ak nie sú nájdené údaje
+    }
+
+    const savedVotes = JSON.parse(localStorage.getItem("votes"));
+    if (savedVotes) {
+      setVotes(savedVotes);
+    } else {
     }
   }, [navigate]);
 
-  // Funkcia na logout
   const handleLogout = () => {
-    // Na odhlásenie vyčistí storage, ktorú naplnilo v Login.js pri response
     localStorage.removeItem("isAuthenticated");
-
-    // Redirect na login page
     navigate("/");
   };
 
-  // logika pre box s fakturami
   const toggleInvoiceModal = () => {
     setIsInvoiceModalOpen(!isInvoiceModalOpen);
   };
 
-  // logika pre box s hlasovanim
   const toggleVoteModal = () => {
     setIsVoteModalOpen(!isVoteModalOpen);
   };
+
+  // Pridanie nového hlasovania a jeho uloženie
+  const addNewVote = (newVote) => {
+    const updatedVotes = [...votes, newVote];
+    setVotes(updatedVotes);
+    localStorage.setItem("votes", JSON.stringify(updatedVotes));
+  };
+
+  // Funkcia pre správu hlasovania užívateľa
+  const handleVote = (voteIndex, answerIndex) => {
+    const updatedVotes = [...votes];
+    const currentVote = updatedVotes[voteIndex];
+    const userVote = { userId: user.id, answerIndex };
+
+    if (!currentVote.userVotes) currentVote.userVotes = {}; // Inicializujeme userVotes pre tento hlas
+    currentVote.userVotes[user.id] = answerIndex;
+
+    // Ak už používateľ hlasoval, nebude môcť zmeniť svoj hlas
+    if (currentVote.userVotes[user.id] !== undefined) {
+      currentVote.answers[answerIndex].votes += 1;
+      setVotes(updatedVotes);
+      localStorage.setItem("votes", JSON.stringify(updatedVotes));
+    } else {
+      alert("Tento používateľ už hlasoval!");
+    }
+  };
+
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
@@ -93,18 +120,30 @@ function Main() {
           {/* Komponent pre zobrazenie uloh */}
           <TasksBox />
 
-          <VotingBox toggleVoteModal={toggleVoteModal} />
+          {/* Predáme votes a setVotes ako prop */}
+          <VotingBox 
+            votes={votes} 
+            setVotes={setVotes}  
+            toggleVoteModal={toggleVoteModal} 
+            handleVote={handleVote}  // Predáme funkciu pre hlasovanie
+          />
+          
           {/* Komponent pre zobrazenie problémov */}
           <ProblemsBox />
         </div>
       </div>
-      {/* Komponent pre zobrazenie sumbmit boxy pre faktury */}
+      {/* Komponent pre zobrazenie submit boxy pre faktúry */}
       <InvoiceModal
         isOpen={isInvoiceModalOpen}
         toggleModal={toggleInvoiceModal}
       />
+
       {/* Hlasovanie Modal */}
-      <NewVoteModal isOpen={isVoteModalOpen} toggleModal={toggleVoteModal} />
+      <NewVoteModal 
+        isOpen={isVoteModalOpen} 
+        toggleModal={toggleVoteModal} 
+        addNewVote={addNewVote} 
+      />
     </div>
   );
 }

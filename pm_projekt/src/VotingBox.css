@@ -33,3 +33,49 @@
 .voting-results li {
   margin-bottom: 5px;
 }
+
+
+/* Hlava hlasovania */
+.voting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Názov hlasovania */
+.vote-title {
+  cursor: pointer;
+  color: blue;
+}
+
+/* Tlačidlo pre vymazanie hlasovania */
+.delete-btn1 {
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  margin-bottom: 2em;
+}
+
+/* Tlačidlo pre odpoveď */
+.vote-answer-btn {
+  margin-right: 10px;
+}
+
+/* Text, ktorý zobrazuje, že užívateľ hlasoval */
+.voted-text {
+  color: green;
+  margin-left: 10px;
+}
+
+/* Tlačidlo pre vymazanie hlasu */
+.remove-vote-btn {
+  margin-top: 10px;
+  background-color: orange;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+}

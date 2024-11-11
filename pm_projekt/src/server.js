@@ -113,7 +113,7 @@ async function getClenoviaData() {
 app.get('/api/clenovia', async (req, res) => {
     try {
         const clenovia = await getClenoviaData();
-        console.log('Returned data:', clenovia); // Loguj dáta, ktoré sú vracané
+        //console.log('Returned data:', clenovia); // Loguj dáta, ktoré sú vracané
         res.json(clenovia);
     } catch (error) {
         console.error('Chyba pri načítaní údajov:', error);

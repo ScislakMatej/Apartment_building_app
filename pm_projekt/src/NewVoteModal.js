@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Modal.css";
 
-function NewVoteModal({ isOpen, toggleModal }) {
+function NewVoteModal({ isOpen, toggleModal, addNewVote }) {
   // premenné pre polia formulára
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -10,6 +10,9 @@ function NewVoteModal({ isOpen, toggleModal }) {
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [answerError, setAnswerError] = useState("");
+
+
+  
   // Resetuje polia formulára a chyby pri zatvorení modalu
   useEffect(() => {
     if (!isOpen) {
@@ -21,52 +24,76 @@ function NewVoteModal({ isOpen, toggleModal }) {
       setAnswerError("");
     }
   }, [isOpen]);
+
+
   // Funkcia na pridanie nového políčka pre odpoveď
   const addAnswerField = () => {
     setAnswers([...answers, ""]);
   };
+
+
   // Funkcia na sledovanie zmien v odpoveďových poliach
   const handleAnswerChange = (index, value) => {
     const newAnswers = [...answers];
     newAnswers[index] = value;
     setAnswers(newAnswers);
   };
-  // Funkcia na spracovanie odoslania formulára
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let isValid = true;
-    // Kontrola názvu
-    if (!title.trim()) {
-      setTitleError("Prosím, zadajte názov hlasovania.");
-      isValid = false;
-    } else {
-      setTitleError("");
-    }
-    // Kontrola popisu
-    if (!description.trim()) {
-      setDescriptionError("Prosím, zadajte popis hlasovania.");
-      isValid = false;
-    } else {
-      setDescriptionError("");
-    }
-    // Kontrola odpovedí overí, či je aspoň jedna odpoveď je ne-prázdna
-    const hasNonEmptyAnswer = answers.some((answer) => answer.trim() !== "");
-    if (!hasNonEmptyAnswer) {
-      setAnswerError("Prosím, zadajte aspoň jednu odpoveď.");
-      isValid = false;
-    } else {
-      setAnswerError("");
-    }
-    // Ak sú všetky polia ok, odošle formulár
-    if (!isValid) return;
-    // Resetuje formulár a zatvorí modal po úspešnom odoslaní
+
+
+// Funkcia na spracovanie odoslania formulára
+const handleSubmit = (e) => {
+  e.preventDefault();
+  let isValid = true;
+
+  // Kontrola názvu
+  if (!title.trim()) {
+    setTitleError("Prosím, zadajte názov hlasovania.");
+    isValid = false;
+  } else {
+    setTitleError(""); // Vymazanie chyby ak je názov platný
+  }
+
+  // Kontrola popisu
+  if (!description.trim()) {
+    setDescriptionError("Prosím, zadajte popis hlasovania.");
+    isValid = false;
+  } else {
+    setDescriptionError(""); // Vymazanie chyby ak je popis platný
+  }
+
+  // Kontrola odpovedí (ak je aspoň jedna odpoveď ne-prázdna)
+  const hasNonEmptyAnswer = answers.some((answer) => answer.trim() !== "");
+  if (!hasNonEmptyAnswer) {
+    setAnswerError("Prosím, zadajte aspoň jednu odpoveď.");
+    isValid = false;
+  } else {
+    setAnswerError(""); // Vymazanie chyby ak odpoveď nie je prázdna
+  }
+
+  // Ak sú všetky polia validné, odošle formulár
+  if (isValid) {
+    const newVote = {
+      title,
+      description,
+      answers
+    };
+
+    addNewVote(newVote); // Funkcia na pridanie nového hlasovania
+    toggleModal(); // Zatvorenie modalu po úspešnom odoslaní
+
+    // Resetovanie formulára
     setTitle("");
     setDescription("");
     setAnswers([""]);
-    toggleModal(); // Zatvorí modal
-  };
+  }
+};
+
+
+
   // Ak modal nie je otvorený, nevykresľuje komponent
   if (!isOpen) return null;
+
+
 
   return (
     <div className="modal-overlay" onClick={toggleModal}>
@@ -76,6 +103,7 @@ function NewVoteModal({ isOpen, toggleModal }) {
       >
         <h2>Pridať nové hlasovanie</h2>
         <form onSubmit={handleSubmit}>
+
           {/* Pole pre názov hlasovania */}
           <label>
             <input
@@ -87,6 +115,7 @@ function NewVoteModal({ isOpen, toggleModal }) {
             />
             {titleError && <span className="error-message">{titleError}</span>}
           </label>
+
           {/* Pole pre popis hlasovania */}
           <label>
             <input
@@ -100,18 +129,21 @@ function NewVoteModal({ isOpen, toggleModal }) {
               <span className="error-message">{descriptionError}</span>
             )}
           </label>
-          {/* Dynamické polia pre odpovede */}
-          {answers.map((answer, index) => (
-            <label key={index}>
-              <input
-                type="text"
-                placeholder={`Odpoved ${index + 1}`}
-                value={answer}
-                onChange={(e) => handleAnswerChange(index, e.target.value)}
-                className="input-field"
-              />
-            </label>
-          ))}
+          
+          {/* Dynamické polia pre odpovede*/}
+            {answers.map((answer, index) => (
+              <label key={index}>
+                <input
+                  type="text"
+                  placeholder={`Odpoved ${index + 1}`}
+                  value={answer}
+                  onChange={(e) => handleAnswerChange(index, e.target.value)}
+                  className="input-field"
+                />
+              </label>
+            ))}
+          
+
           {answerError && <span className="error-message">{answerError}</span>}
           {/* Tlačidlo na pridanie nového políčka pre odpoveď a tlačidlo na odoslanie */}
           <div className="button-container">
@@ -131,6 +163,7 @@ function NewVoteModal({ isOpen, toggleModal }) {
             </button>
           </div>
         </form>
+
         {/* Tlačidlo na zatvorenie modalu */}
         <button className="close-btn" onClick={toggleModal}>
           X
