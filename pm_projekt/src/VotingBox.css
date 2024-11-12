@@ -1,21 +1,28 @@
 .voting-box {
-  background-color: #ededed;
-  padding: 15px;
-  border-radius: 20px;
+  background-color: #f1f1f1;
+  padding: 20px;
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 200px;
-  overflow-y: auto;
 }
 
 .voting-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+}
+
+h3 {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: bold;
 }
 
 .add-btn {
   background: none;
   border: none;
+  margin-left: 10px;
   cursor: pointer;
 }
 
@@ -24,58 +31,100 @@
   height: 20px;
 }
 
-.voting-results {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
+.list-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
-.voting-results li {
+.list-icon {
+  width: 20px;
+  height: 20px;
+}
+.vote-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1em;
   margin-bottom: 5px;
 }
 
-
-/* Hlava hlasovania */
-.voting-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-/* Názov hlasovania */
 .vote-title {
+  font-weight: bold;
   cursor: pointer;
-  color: blue;
+  color: #003366;
 }
 
-/* Tlačidlo pre vymazanie hlasovania */
 .delete-btn1 {
-  background: red;
+  background-color: red;
   color: white;
   border: none;
   padding: 5px 10px;
+  border-radius: 5px;
   cursor: pointer;
-  margin-bottom: 2em;
+  font-size: 0.9em;
 }
 
-/* Tlačidlo pre odpoveď */
-.vote-answer-btn {
-  margin-right: 10px;
+.voting-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-/* Text, ktorý zobrazuje, že užívateľ hlasoval */
+.voting-item {
+  display: flex;
+  align-items: center;
+  /*justify-content: space-between; */
+  margin: 5px 0;
+}
+
+.voting-results li {
+  display: flex;
+  align-items: center;
+  margin: 5px 0;
+}
+
+.square-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.square-btn img {
+  width: 20px;
+  height: 20px;
+}
+
 .voted-text {
   color: green;
-  margin-left: 10px;
+  font-size: 0.9em;
+  margin-left: 5px;
 }
 
-/* Tlačidlo pre vymazanie hlasu */
 .remove-vote-btn {
   margin-top: 10px;
   background-color: orange;
   color: white;
   padding: 8px 15px;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+}
+
+.answer-text {
+  margin-left: 5px;
+}
+
+.answer-container {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+}
+.vote-count {
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #333;
+  text-align: right;
+  min-width: 40px;
 }
