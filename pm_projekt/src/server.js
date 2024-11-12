@@ -3,6 +3,9 @@ const sql = require('mssql');  // Import mssql client
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
+const xlsx = require("xlsx");
+const fs = require("fs");
+
 
 
 // Načítanie environment premenných
@@ -85,6 +88,52 @@ app.listen(PORT, () => {
     console.log(`Server beží na http://localhost:${PORT}`);
 });
 
+/* -------------------------------------VYKRESLENIE EXCEL SUBORU----------------------------------- 
+
+const { BlobServiceClient } = require("@azure/storage-blob");
+const connectionString = 'DefaultEndpointsProtocol=https;AccountName=pmprojectstorage;AccountKey=H/KdyRAkk+euJZTLJY7/1mgXVeFWp/lk3ZgQQvYJkm/NaqmucdmsKX0Rn6bBzAv4y9ShV6f9o3eO+AStWU1ArA==;EndpointSuffix=core.windows.net';
+
+// Funkcia na stiahnutie súboru z Azure Storage
+async function downloadExcelFile() {
+    const blobServiceClient = BlobServiceClient.fromConnectionString(connectionString);
+    const containerClient = blobServiceClient.getContainerClient("expenses-graph"); // Zmeňte na názov vášho kontajnera
+    const blobClient = containerClient.getBlobClient("graf.xlsx"); // Zmeňte na názov vášho Excel súboru
+
+    // Stiahnutie obsahu súboru ako Buffer
+    const downloadBlockBlobResponse = await blobClient.download();
+    const downloaded = await streamToBuffer(downloadBlockBlobResponse.readableStreamBody);
+    return downloaded;
+}
+
+// Pomocná funkcia na prevod streamu na Buffer
+async function streamToBuffer(readableStream) {
+    const chunks = [];
+    for await (const chunk of readableStream) {
+        chunks.push(chunk instanceof Buffer ? chunk : Buffer.from(chunk));
+    }
+    return Buffer.concat(chunks);
+}
+
+// Funkcia na čítanie dát z Excelu a ich prevod na JSON
+function parseExcel(buffer) {
+    const workbook = xlsx.read(buffer, { type: "buffer" });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]]; // Vyberte prvý list
+    const jsonData = xlsx.utils.sheet_to_json(worksheet);
+    return jsonData;
+}
+
+// API endpoint na získanie dát z Excel súboru
+app.get('/api/excel-data', async (req, res) => {
+    try {
+        const excelBuffer = await downloadExcelFile();
+        const jsonData = parseExcel(excelBuffer);
+        res.json(jsonData); // Odošlite dáta do frontendu vo formáte JSON
+    } catch (error) {
+        console.error('Chyba pri načítaní Excel súboru:', error);
+        res.status(500).json({ message: 'Chyba pri načítaní Excel súboru', error });
+    }
+});
+*/
 
 //* -------------------------------------UPRATOVANIE V BYTOVKE----------------------------------- */
 // Funkcia pre získanie údajov z databázy
@@ -172,6 +221,8 @@ app.put('/api/problems/:id', async (req, res) => {
         res.status(500).json({ message: 'Error updating task status', error });
     }
 });
+
+
 
 
 

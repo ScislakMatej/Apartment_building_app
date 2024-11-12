@@ -5,7 +5,8 @@ import ProblemsBox from "./ProblemsBox";
 import TasksBox from "./TasksBox";
 import InvoiceModal from "./InvoiceModal";
 import NewVoteModal from "./NewVoteModal";
-import VotingBox from "./VotingBox";  // Import VotingBox
+import VotingBox from "./VotingBox";
+import GraphBox from "./GraphBox";  
 
 function Main() {
   const navigate = useNavigate();
@@ -114,7 +115,9 @@ function Main() {
               </button>
             </div>
             <hr />
-            <div className="account-graph">TU GRAF xdd</div>
+            <div className="account-graph">
+            <GraphBox />
+            </div>
           </div>
 
           {/* Komponent pre zobrazenie uloh */}
