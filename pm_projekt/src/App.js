@@ -3,9 +3,10 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Main from "./Main";
 import ProtectedRoute from "./ProtectedRoute";
+import Dokumenty from "./Dokumenty"; // Import the new Dokumenty component
 
 function App() {
-  return ( //hlavná route je v index.js
+  return (
     <Routes>
       <Route path="/" element={<Login />} />
       <Route
@@ -13,6 +14,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Main />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/Dokumenty"
+        element={
+          <ProtectedRoute>
+            <Dokumenty />
           </ProtectedRoute>
         }
       />

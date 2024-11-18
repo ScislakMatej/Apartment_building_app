@@ -171,14 +171,14 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
         <h3>
           Posledné hlasovanie
           <button className="add-btn" onClick={toggleVoteModal}>
-            <img src="./Add.svg" alt="Add Vote" className="add-icon" />
+            <img src="./Add.svg" alt="Add Vote" className="icon add-icon" />
           </button>
         </h3>
         <button
           className="list-btn"
           onClick={() => setShowAllVotes(!showAllVotes)}
         >
-          <img src="./List.svg" alt="List Votes" className="list-icon" />
+          <img src="./List.svg" alt="List Votes" className="icon list-icon" />
         </button>
       </div>
       <hr />

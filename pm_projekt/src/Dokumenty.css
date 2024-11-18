@@ -1,0 +1,80 @@
+/* Dokumenty.css */
+.dokumenty-content {
+  padding: 20px;
+  background-color: #ededed;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.documents-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.documents-table th,
+.documents-table td {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #dbdbdb;
+}
+
+.documents-table th {
+  background-color: #263268;
+  color: #ededed;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.documents-table td {
+  text-align: left;
+  padding: 10px;
+  border: 1px solid #dbdbdb;
+}
+
+.documents-table th:hover {
+  background-color: #4053ac;
+}
+
+.documents-table a {
+  color: #348ceb;
+  text-decoration: none;
+}
+
+.documents-table a:hover {
+  text-decoration: underline;
+}
+
+.documents-table td:nth-child(6) {
+  text-align: center; /* Center icony dw */
+}
+.download-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.download-icon:hover {
+  opacity: 0.8;
+}
+.header-with-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.add-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.add-icon {
+  width: 30px;
+  height: 30px;
+}

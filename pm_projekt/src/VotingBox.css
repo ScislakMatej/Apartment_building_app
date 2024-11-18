@@ -38,8 +38,9 @@ h3 {
 }
 
 .list-icon {
-  width: 20px;
-  height: 20px;
+  width: 28px;
+  height: 28px;
+  margin-bottom: -5px;
 }
 .vote-header {
   display: flex;
@@ -92,8 +93,8 @@ h3 {
 }
 
 .square-btn img {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
 }
 
 .voted-text {

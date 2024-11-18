@@ -6,16 +6,17 @@ import TasksBox from "./TasksBox";
 import InvoiceModal from "./InvoiceModal";
 import NewVoteModal from "./NewVoteModal";
 import VotingBox from "./VotingBox";
-import GraphBox from "./GraphBox";  
+import GraphBox from "./GraphBox";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
 
 function Main() {
   const navigate = useNavigate();
   const [user, setUser] = useState({});
-  
   const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
   const [isVoteModalOpen, setIsVoteModalOpen] = useState(false);
-  const [votes, setVotes] = useState([]);  // Stav pre hlasovania
-  
+  const [votes, setVotes] = useState([]); // Stav pre hlasovania
+
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
     if (storedUser) {
@@ -73,38 +74,10 @@ function Main() {
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <div className="sidebar">
-        <p className="sidebar-address">Podivínska 12 Košice</p>
-        <nav className="nav-links">
-          <a href="#" className="nav-item">
-            <div className="nav-button">
-              <img src="./Home.svg" alt="Home Icon" className="nav-icon" />
-            </div>
-            <span>Home</span>
-          </a>
-          <a href="?" className="nav-item">
-            <div className="nav-button">
-              <img
-                src="./Document.svg"
-                alt="Document Icon"
-                className="nav-icon"
-              />
-            </div>
-            <span>Dokumenty</span>
-          </a>
-        </nav>
-      </div>
+      <Sidebar />
 
       <div className="main-content">
-        <div className="header">
-          <span>
-            {user.meno} {user.priezvisko}
-          </span>
-          <span>Byt č. {user.cislo_bytu}</span>
-          <button className="logout-button" onClick={handleLogout}>
-            <img src="./Logout.svg" alt="Logout" className="logout-icon" />
-          </button>
-        </div>
+        <Header user={user} onLogout={handleLogout} />
 
         <div className="dashboard-body">
           <div className="account-box">
@@ -116,7 +89,7 @@ function Main() {
             </div>
             <hr />
             <div className="account-graph">
-            <GraphBox />
+              <GraphBox />
             </div>
           </div>
 
@@ -124,13 +97,13 @@ function Main() {
           <TasksBox />
 
           {/* Predáme votes a setVotes ako prop */}
-          <VotingBox 
-            votes={votes} 
-            setVotes={setVotes}  
-            toggleVoteModal={toggleVoteModal} 
-            handleVote={handleVote}  // Predáme funkciu pre hlasovanie
+          <VotingBox
+            votes={votes}
+            setVotes={setVotes}
+            toggleVoteModal={toggleVoteModal}
+            handleVote={handleVote} // Predáme funkciu pre hlasovanie
           />
-          
+
           {/* Komponent pre zobrazenie problémov */}
           <ProblemsBox />
         </div>
@@ -142,10 +115,10 @@ function Main() {
       />
 
       {/* Hlasovanie Modal */}
-      <NewVoteModal 
-        isOpen={isVoteModalOpen} 
-        toggleModal={toggleVoteModal} 
-        addNewVote={addNewVote} 
+      <NewVoteModal
+        isOpen={isVoteModalOpen}
+        toggleModal={toggleVoteModal}
+        addNewVote={addNewVote}
       />
     </div>
   );

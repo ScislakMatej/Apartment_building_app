@@ -130,8 +130,10 @@
 .button-container {
   display: flex;
   justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-top: 15px;
+  gap: 10px;
 }
 
 .tooltip {
@@ -169,4 +171,25 @@
   color: red;
   font-size: 0.875em;
   margin-top: 4px;
+}
+.dropdown {
+  width: 100%;
+  padding: 10px;
+  padding-right: 40px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  background-color: #dbdbdb;
+  font-size: 16px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  appearance: none;
+  background-image: url("/public/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.dropdown:focus {
+  border-color: #4053ac;
+  outline: none;
 }

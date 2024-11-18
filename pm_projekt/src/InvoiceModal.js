@@ -180,7 +180,7 @@ function InvoiceModal({ isOpen, toggleModal }) {
             />
 
             <button type="submit" className="submit-btn">
-              Odosli
+              Odošli
             </button>
           </div>
 
