@@ -6,6 +6,7 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
   const [voteCounts, setVoteCounts] = useState([]);
   const [userVotes, setUserVotes] = useState({});
   const [showAllVotes, setShowAllVotes] = useState(false);
+
   // Funkcia na získanie prihláseného používateľa z localStorage
   const getUserFromLocalStorage = () => {
     try {
@@ -31,17 +32,8 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
   };
 
   useEffect(() => {
-    const user = getUserFromLocalStorage();
-
     if (!isAuthenticated()) {
       return;
-    }
-
-    const savedIndex = localStorage.getItem(
-      getUserStorageKey("expandedVoteIndex")
-    );
-    if (savedIndex !== null) {
-      setExpandedVoteIndex(JSON.parse(savedIndex));
     }
 
     const savedVoteCounts = localStorage.getItem(
@@ -64,20 +56,19 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
     if (savedUserVotes) {
       setUserVotes(JSON.parse(savedUserVotes));
     }
+
+    // Always show the latest vote expanded when loading initially.
+    if (votes.length > 0) {
+      setExpandedVoteIndex(votes.length - 1);
+    }
   }, [votes]);
 
   const handleVoteClick = (index) => {
     const newExpandedIndex = expandedVoteIndex === index ? null : index;
     setExpandedVoteIndex(newExpandedIndex);
-    localStorage.setItem(
-      getUserStorageKey("expandedVoteIndex"),
-      JSON.stringify(newExpandedIndex)
-    );
   };
 
   const handleVote = (voteIndex, answerIndex) => {
-    const user = getUserFromLocalStorage(); // Získame prihláseného používateľa
-
     if (!isAuthenticated()) {
       alert("Musíte byť prihlásený, aby ste mohli túto akciu vykonať.");
       return;
@@ -89,13 +80,8 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
     }
 
     const updatedVoteCounts = [...voteCounts];
-    if (!updatedVoteCounts[voteIndex]) {
-      updatedVoteCounts[voteIndex] = new Array(
-        votes[voteIndex].answers.length
-      ).fill(0);
-    }
-
     updatedVoteCounts[voteIndex][answerIndex] += 1;
+
     setVoteCounts(updatedVoteCounts);
     localStorage.setItem(
       getUserStorageKey("voteCounts"),
@@ -111,8 +97,6 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
   };
 
   const handleRemoveVote = (voteIndex) => {
-    const user = getUserFromLocalStorage(); // Získame prihláseného používateľa
-
     if (!isAuthenticated()) {
       alert("Musíte byť prihlásený, aby ste mohli túto akciu vykonať.");
       return;
@@ -143,19 +127,15 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
   };
 
   const deleteVote = (voteIndex) => {
-    const user = getUserFromLocalStorage();
-
     if (!isAuthenticated()) {
       alert("Musíte byť prihlásený, aby ste mohli túto akciu vykonať.");
       return;
     }
 
-    // Odstránime hlasovanie zo zoznamu
     const updatedVotes = votes.filter((_, index) => index !== voteIndex);
     setVotes(updatedVotes);
     localStorage.setItem("votes", JSON.stringify(updatedVotes));
 
-    // Odstránime všetky hlasovania používateľa z daného hlasovania
     const updatedUserVotes = { ...userVotes };
     delete updatedUserVotes[voteIndex];
     setUserVotes(updatedUserVotes);
@@ -164,6 +144,37 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
       JSON.stringify(updatedUserVotes)
     );
   };
+
+  // Function to render vote counts
+  const renderVoteCounts = (vote, voteIndex) => (
+    <ul className="voting-results">
+      {vote.answers.map((answer, answerIndex) => (
+        <li key={answerIndex} className="voting-item">
+          <div className="answer-container">
+            <button
+              onClick={() => handleVote(voteIndex, answerIndex)}
+              className="square-btn"
+            >
+              <img
+                src={
+                  userVotes[voteIndex] === answerIndex
+                    ? "./Tick-checkbox.svg"
+                    : "./Square.svg"
+                }
+                alt={
+                  userVotes[voteIndex] === answerIndex ? "Checked" : "Unchecked"
+                }
+              />
+            </button>
+            <span className="answer-text">{answer}</span>
+          </div>
+          <span className="vote-count">
+            {voteCounts[voteIndex]?.[answerIndex] || 0}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
 
   return (
     <div className="voting-box">
@@ -203,39 +214,7 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
               {expandedVoteIndex === voteIndex && (
                 <div>
                   <p>{vote.description}</p>
-                  <ul className="voting-results">
-                    {vote.answers.map((answer, answerIndex) => (
-                      <li key={answerIndex}>
-                        <button
-                          onClick={() => handleVote(voteIndex, answerIndex)}
-                          className="square-btn"
-                        >
-                          <img
-                            src={
-                              userVotes[voteIndex] === answerIndex
-                                ? "./Tick-checkbox.svg"
-                                : "./Square.svg"
-                            }
-                            alt={
-                              userVotes[voteIndex] === answerIndex
-                                ? "Checked"
-                                : "Unchecked"
-                            }
-                          />
-                        </button>
-                        {answer}
-                        <span>
-                          {voteCounts[voteIndex]?.[answerIndex] || 0} hlasov
-                        </span>
-                        {userVotes[voteIndex] === answerIndex && (
-                          <span className="voted-text">
-                            {" "}
-                            Hlasovali ste za túto možnosť!
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
+                  {renderVoteCounts(vote, voteIndex)}
                   {userVotes[voteIndex] !== undefined && (
                     <button
                       onClick={() => handleRemoveVote(voteIndex)}
@@ -261,40 +240,7 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
             </div>
             <div>
               <p>{votes[votes.length - 1].description}</p>
-              <ul className="voting-results">
-                {votes[expandedVoteIndex]?.answers?.map(
-                  (answer, answerIndex) => (
-                    <li key={answerIndex} className="voting-item">
-                      <div className="answer-container">
-                        <button
-                          onClick={() =>
-                            handleVote(expandedVoteIndex, answerIndex)
-                          }
-                          className="square-btn"
-                        >
-                          <img
-                            src={
-                              userVotes[expandedVoteIndex] === answerIndex
-                                ? "./Tick-checkbox.svg"
-                                : "./Square.svg"
-                            }
-                            alt={
-                              userVotes[expandedVoteIndex] === answerIndex
-                                ? "Checked"
-                                : "Unchecked"
-                            }
-                          />
-                        </button>
-                        <span className="answer-text">{answer}</span>
-                      </div>
-                      <span className="vote-count">
-                        {voteCounts[expandedVoteIndex]?.[answerIndex] || 0}
-                      </span>
-                    </li>
-                  )
-                )}
-              </ul>
-
+              {renderVoteCounts(votes[votes.length - 1], votes.length - 1)}
               {userVotes[votes.length - 1] !== undefined && (
                 <button
                   onClick={() => handleRemoveVote(votes.length - 1)}
