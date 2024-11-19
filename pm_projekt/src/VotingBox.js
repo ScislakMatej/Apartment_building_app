@@ -57,7 +57,7 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
       setUserVotes(JSON.parse(savedUserVotes));
     }
 
-    // Always show the latest vote expanded when loading initially.
+    // default zobrazenie otvorene
     if (votes.length > 0) {
       setExpandedVoteIndex(votes.length - 1);
     }
@@ -145,7 +145,7 @@ function VotingBox({ votes, toggleVoteModal, setVotes }) {
     );
   };
 
-  // Function to render vote counts
+  // zobrazenie poctu hlasovani
   const renderVoteCounts = (vote, voteIndex) => (
     <ul className="voting-results">
       {vote.answers.map((answer, answerIndex) => (
