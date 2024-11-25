@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom"; 
 import "./Sidebar.css";
 
 const Sidebar = () => {
@@ -14,7 +14,6 @@ const Sidebar = () => {
           <span>Home</span>
         </Link>
         <Link to="/Dokumenty" className="nav-item">
-          {" "}
           <div className="nav-button">
             <img
               src="./Document.svg"
@@ -23,6 +22,12 @@ const Sidebar = () => {
             />
           </div>
           <span>Dokumenty</span>
+        </Link>
+        <Link to="/Settings" className="nav-item">
+          <div className="nav-button">
+            <img src="./gear.svg" alt="Settings Icon" className="nav-icon" />
+          </div>
+          <span>Nastavenia</span>
         </Link>
       </nav>
     </div>

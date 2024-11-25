@@ -16,6 +16,10 @@ body {
 }
 
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
   background-color: #263268;
   color: #ededed;
   padding: 20px;
@@ -57,6 +61,7 @@ body {
 .main-content {
   flex-grow: 1;
   padding: 20px;
+  margin-left: 170px;
 }
 
 .header {

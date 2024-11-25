@@ -3,7 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import Login from "./Login";
 import Main from "./Main";
 import ProtectedRoute from "./ProtectedRoute";
-import Dokumenty from "./Dokumenty"; // Import the new Dokumenty component
+import Dokumenty from "./Dokumenty";
+import Settings from "./Settings";
 
 function App() {
   return (
@@ -22,6 +23,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Dokumenty />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/Settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
           </ProtectedRoute>
         }
       />
