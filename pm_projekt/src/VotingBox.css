@@ -1,7 +1,7 @@
 .voting-box {
-  background-color: #f1f1f1;
+  background-color: #ededed;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -40,14 +40,14 @@ h3 {
 .list-icon {
   width: 28px;
   height: 28px;
-  margin-bottom: -5px;
+  margin-bottom: -3px;
 }
 .vote-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   font-size: 1em;
-  margin-bottom: 5px;
+  margin-bottom: px;
 }
 
 .vote-title {
@@ -63,6 +63,7 @@ h3 {
   padding: 5px 10px;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 10px;
   font-size: 0.9em;
 }
 
@@ -75,7 +76,6 @@ h3 {
 .voting-item {
   display: flex;
   align-items: center;
-  /*justify-content: space-between; */
   margin: 5px 0;
 }
 
@@ -104,7 +104,7 @@ h3 {
 }
 
 .remove-vote-btn {
-  margin-top: 10px;
+  margin-top: 0px;
   background-color: orange;
   color: white;
   padding: 8px 15px;

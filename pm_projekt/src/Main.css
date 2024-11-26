@@ -91,7 +91,7 @@ body {
 .account-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 0px;
 }
 
 .account-graph {
@@ -133,7 +133,7 @@ th {
 .voting-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .voting-results li {
@@ -151,7 +151,7 @@ th {
 .problems-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 0px;
 }
 
 .problems-list li {

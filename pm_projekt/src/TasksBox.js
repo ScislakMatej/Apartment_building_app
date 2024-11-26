@@ -1,6 +1,6 @@
 
 import  React, { useState, useEffect } from 'react';
-
+import "./TasksBox";
 
 //* -----------------------UPRATOVANIE & KOSENIE-----------------------*//
 
@@ -31,7 +31,7 @@ function TasksBox() {
   
     return (
       <div className="tasks-box">
-        <h3>Práce tento mesiac</h3>
+        <h3 className='title'>Práce tento mesiac</h3>
         <hr />
         <div className="table-container"> {/* Wrapper for the table */}
           <table>
