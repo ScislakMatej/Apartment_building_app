@@ -2,11 +2,14 @@ body {
   background-color: #dbdbdb;
   font-family: Arial, sans-serif;
   color: #333;
+  margin: 0;
+  padding: 0;
 }
 
 .settings-page {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
+  flex-direction: column;
 }
 
 .main-content {
@@ -15,16 +18,23 @@ body {
 }
 
 .settings-content {
+  margin-bottom: 20px;
+}
+
+.settings-box,
+.new-user-box {
   background-color: #ededed;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
 }
 
-.settings-form {
+.settings-form,
+.new-user-form {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 10px;
 }
 
 .form-row {
@@ -38,7 +48,6 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 15px;
 }
 
 .label-wrapper {
@@ -101,7 +110,6 @@ body {
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  margin-left: auto;
 }
 
 .save-btn:hover {
@@ -112,4 +120,8 @@ h1 {
   font-size: 2rem;
   color: #263268;
   margin-bottom: 20px;
+}
+
+.settings-page {
+  padding-bottom: 40px;
 }
