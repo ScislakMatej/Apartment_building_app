@@ -1,12 +1,16 @@
+body {
+  background-color: #dbdbdb;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
 .settings-page {
   display: flex;
   height: 100vh;
-  background-color: #dbdbdb;
 }
 
 .main-content {
   flex-grow: 1;
-  background-color: #dbdbdb;
   padding: 20px;
 }
 
@@ -20,65 +24,92 @@
 .settings-form {
   display: flex;
   flex-direction: column;
+  gap: 30px;
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
   gap: 20px;
-  margin-bottom: 30px;
-  margin-top: 20px;
+  align-items: flex-start;
 }
 
-.settings-form h2 {
-  font-size: 1.5rem;
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.label-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}
+
+.label-text {
+  font-size: 1rem;
+  font-weight: bold;
   color: #263268;
-  margin-bottom: 10px;
 }
 
+.current-email,
 .input-field {
-  width: 98%;
-  padding: 10px;
+  width: 100%;
+  height: 32px;
+  padding: 6px 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
   background-color: #dbdbdb;
-  font-size: 1rem;
+  font-size: 0.9rem;
+  color: #333;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
-.input-field:focus {
+.input-field:focus,
+.input-field:hover {
   border-color: #263268;
+  background-color: #dbdbdb;
   outline: none;
 }
 
+.new-email {
+  margin-top: 10px;
+}
+
+.old-password {
+  margin-top: -10px;
+}
+
+.shared-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
 .save-btn {
+  height: 40px;
+  padding: 10px 20px;
   background-color: #263268;
   color: white;
   border: none;
-  padding: 10px 20px;
   border-radius: 8px;
   font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
-  align-self: flex-start;
+  margin-left: auto;
 }
 
 .save-btn:hover {
   background-color: #4053ac;
 }
 
-label {
-  font-weight: bold;
-  color: #333;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.current-email {
-  font-size: 1rem;
+h1 {
+  font-size: 2rem;
+  color: #263268;
   margin-bottom: 20px;
-  color: #333;
-  background-color: #dbdbdb;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #ccc;
-  margin: 20px 0;
 }

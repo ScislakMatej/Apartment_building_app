@@ -94,7 +94,6 @@
   cursor: pointer;
 }
 
-/* hide default file input */
 .input-upload {
   display: none;
 }

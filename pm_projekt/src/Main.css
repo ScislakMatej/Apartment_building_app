@@ -91,7 +91,15 @@ body {
 .account-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-top: 1px solid #ccc;
 }
 
 .account-graph {
@@ -133,7 +141,7 @@ th {
 .voting-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 0px;
+  margin-bottom: 10px;
 }
 
 .voting-results li {
@@ -146,6 +154,7 @@ th {
   padding: 20px;
   border-radius: 20px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
 }
 
 .problems-header {
@@ -165,7 +174,12 @@ th {
   cursor: pointer;
   width: 24px;
   height: 24px;
-  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: px;
+  padding: 0px;
+  background: transparent;
 }
 
 .add-icon {

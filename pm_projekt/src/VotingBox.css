@@ -32,9 +32,17 @@ h3 {
 }
 
 .list-btn {
-  background: none;
   border: none;
+  font-size: 18px;
   cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex; /* Ensures centering the icon */
+  align-items: center; /* Center icon vertically */
+  justify-content: center; /* Center icon horizontally */
+  margin-bottom: 0px; /* Remove any unnecessary spacing */
+  padding: 0; /* Remove extra padding */
+  background: transparent; /* Keep the background transparent */
 }
 
 .list-icon {
