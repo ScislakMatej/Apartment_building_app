@@ -17,6 +17,14 @@ app.use(cors()); // CORS policy
 
 app.use(express.static(path.join(__dirname, 'src')));
 
+app.use((req, res, next) => {
+    if (!pool) {
+        return res.status(500).json({ message: 'Databázové pripojenie nie je dostupné' });
+    }
+    next();
+});
+
+
 // Konifg databazy
 const dbConfig = {
     user: process.env.DB_USER || 'Admin1',
@@ -192,13 +200,15 @@ app.post('/api/problems', async (req, res) => {
     try {
         const result = await pool.request()
             .input('problem', sql.Text, problem)
-            .query('INSERT INTO udrzba (problem) OUTPUT INSERTED.* VALUES (@problem)');
+            .input('je_spravene', sql.Bit, false)  // Nastavíme hodnotu pre 'je_spravene'
+            .query('INSERT INTO udrzba (problem, je_spravene) OUTPUT INSERTED.* VALUES (@problem, @je_spravene)');
         res.status(201).json(result.recordset[0]);
     } catch (error) {
         console.error('Error adding task:', error);
         res.status(500).json({ message: 'Error adding task', error });
     }
 });
+
 
 // Cesta na zmenu je_spravene z 0 na 1
 app.put('/api/problems/:id', async (req, res) => {
