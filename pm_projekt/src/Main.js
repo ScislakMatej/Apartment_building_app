@@ -82,7 +82,7 @@ function Main() {
         <div className="dashboard-body">
           <div className="account-box">
             <div className="account-header">
-              <h3>Stav uctu: 5824,58€</h3>
+              <h3>Bankový účet za obdobie 2024-2025</h3>
               <button className="add-btn" onClick={toggleInvoiceModal}>
                 <img src="./Add.svg" alt="Add Icon" className="add-icon" />
               </button>
