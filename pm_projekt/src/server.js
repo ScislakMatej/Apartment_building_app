@@ -1,5 +1,5 @@
 const express = require('express');
-const sql = require('mssql');  // Import mssql client
+const sql = require('mssql'); 
 const dotenv = require('dotenv');
 const path = require('path');
 const cors = require('cors');
@@ -232,10 +232,81 @@ app.put('/api/problems/:id', async (req, res) => {
     }
 });
 
+//* ------------------------------------- SETTING - uprava pouzivatela ----------------------------------- */
 
 
+// Route pre aktualizáciu používateľských údajov (email, heslo)
+// Route pre aktualizáciu používateľských údajov (email, heslo)
+app.put('/api/update-user', async (req, res) => {
+    const { userId, oldPassword, currentEmail, newEmail, newPassword, confirmPassword } = req.body;
 
+    // Overenie, že všetky požiadavky sú prítomné
+    if (!userId || (!newEmail && !newPassword) || (newPassword && newPassword !== confirmPassword)) {
+        return res.status(400).json({ message: 'Prosím zadajte platné údaje (email, heslo).' });
+    }
 
+    try {
+        // Najprv overíme, že staré heslo je správne
+        const request = pool.request();
+        request.input('userId', sql.Int, userId);
+        request.input('oldPassword', sql.NVarChar, oldPassword);
 
+        const result = await request.query(`
+            SELECT * FROM clenovia_bytovky WHERE id_clena = @userId AND heslo = @oldPassword
+        `);
 
+        if (result.recordset.length === 0) {
+            return res.status(401).json({ message: 'Nesprávne staré heslo.' });
+        }
 
+        // Ak je heslo správne, overíme aktuálny email
+        if (currentEmail) {
+            const emailCheckQuery = 'SELECT * FROM clenovia_bytovky WHERE id_clena = @userId AND email = @currentEmail';
+            request.input('currentEmail', sql.NVarChar, currentEmail);
+
+            const emailCheckResult = await request.query(emailCheckQuery);
+
+            if (emailCheckResult.recordset.length === 0) {
+                return res.status(401).json({ message: 'Zadaný e-mail neexistuje v databáze.' });
+            } else {
+                console.log('Aktuálny email overený:', currentEmail);
+            }
+        }
+
+        // Ak je heslo správne, aktualizujeme e-mail alebo heslo
+        let updateQuery = 'UPDATE clenovia_bytovky SET ';
+        const updateValues = [];
+        
+        if (newEmail) {
+            updateQuery += 'email = @newEmail ';
+            updateValues.push({ name: 'newEmail', type: sql.NVarChar, value: newEmail });
+        }
+        
+        if (newPassword) {
+            if (updateValues.length > 0) {
+                updateQuery += ', ';
+            }
+            updateQuery += 'heslo = @newPassword ';
+            updateValues.push({ name: 'newPassword', type: sql.NVarChar, value: newPassword });
+        }
+        
+        updateQuery += 'WHERE id_clena = @userId';
+
+        const updateRequest = pool.request();
+        updateValues.forEach((param) => {
+            updateRequest.input(param.name, param.type, param.value);
+        });
+
+        const updateResult = await updateRequest.query(updateQuery);
+
+        if (updateResult.rowsAffected[0] === 0) {
+            return res.status(404).json({ message: 'Používateľ nebol nájdený.' });
+        }
+
+        res.json({ message: 'Údaje boli úspešne aktualizované.' });
+
+    } catch (error) {
+        console.error('Chyba pri aktualizácii používateľských údajov:', error);
+        res.status(500).json({ message: 'Chyba pri aktualizácii údajov', error });
+    }
+});

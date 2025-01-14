@@ -5,7 +5,7 @@ import "./Settings.css";
 
 function Settings() {
   const user = JSON.parse(localStorage.getItem("user")) || {};
-  const [currentEmail] = useState(user.email || "");
+  const [currentEmail, setCurrentEmail] = useState(user.email || "");
   const [newEmail, setNewEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -16,46 +16,96 @@ function Settings() {
   const [newUserApartmentNumber, setNewUserApartmentNumber] = useState("");
   const [newUserPassword, setNewUserPassword] = useState("");
   const [newUserConfirmPassword, setNewUserConfirmPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
     window.location.href = "/";
   };
 
-  const handleSubmit = (e) => {
+  // Function to update email and password
+  const handleEmailUpdate = async (e) => {
     e.preventDefault();
     if (!oldPassword) {
-      alert("Staré heslo je potrebné na uloženie zmien!");
+      setError("Staré heslo je potrebné na uloženie zmien!");
       return;
     }
     if (!newEmail && !newPassword) {
-      alert("Musíte zadať nový e-mail alebo nové heslo.");
+      setError("Musíte zadať nový e-mail alebo nové heslo.");
       return;
     }
     if (
       (newPassword && !confirmPassword) ||
       (!newPassword && confirmPassword)
     ) {
-      alert("Musíte potvrdiť heslo.");
+      setError("Musíte potvrdiť heslo.");
       return;
     }
     if (newPassword && confirmPassword && newPassword !== confirmPassword) {
-      alert("Heslá sa nezhodujú!");
+      setError("Heslá sa nezhodujú!");
       return;
     }
-    if (newPassword && confirmPassword) {
-      alert("Heslo bolo úspešne zmenené.");
-      setNewPassword("");
-      setConfirmPassword("");
+
+    try {
+      // Update email
+      if (newEmail) {
+        const response = await fetch("/api/update-user", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            oldPassword: oldPassword,
+            newEmail: newEmail,
+            newPassword: newPassword, // Send password as well if provided
+            confirmPassword: confirmPassword, // Send confirmPassword if provided
+          }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setCurrentEmail(newEmail);
+          setNewEmail("");
+          alert("E-mail bol úspešne zmenený.");
+        } else {
+          setError(data.message || "Chyba pri aktualizácii e-mailu.");
+        }
+      }
+
+      // Update password
+      if (newPassword && confirmPassword) {
+        const response = await fetch("/api/update-user", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: user.id,
+            oldPassword: oldPassword,
+            newPassword: newPassword,
+          }),
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+          setNewPassword("");
+          setConfirmPassword("");
+          alert("Heslo bolo úspešne zmenené.");
+        } else {
+          setError(data.message || "Chyba pri aktualizácii hesla.");
+        }
+      }
+
+      setOldPassword(""); // Clear old password
+      setError(""); // Clear errors
+    } catch (error) {
+      setError("Chyba pri aktualizácii údajov.");
     }
-    if (newEmail) {
-      alert("E-mail bol úspešne zmenený.");
-      setNewEmail("");
-    }
-    setOldPassword("");
   };
 
-  const handleAddUser = (e) => {
+  // Function to add a new user
+  const handleAddUser = async (e) => {
     e.preventDefault();
     if (
       !newUserName ||
@@ -65,20 +115,46 @@ function Settings() {
       !newUserPassword ||
       !newUserConfirmPassword
     ) {
-      alert("Všetky polia sú povinné!");
+      setError("Všetky polia sú povinné!");
       return;
     }
     if (newUserPassword !== newUserConfirmPassword) {
-      alert("Heslá sa nezhodujú!");
+      setError("Heslá sa nezhodujú!");
       return;
     }
-    alert(`Používateľ ${newUserName} ${newUserLastName} bol úspešne pridaný!`);
-    setNewUserName("");
-    setNewUserLastName("");
-    setNewUserEmail("");
-    setNewUserApartmentNumber("");
-    setNewUserPassword("");
-    setNewUserConfirmPassword("");
+
+    try {
+      // Send the new user data to the server
+      const response = await fetch("/api/add-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          newUserName,
+          newUserLastName,
+          newUserEmail,
+          newUserApartmentNumber,
+          newUserPassword,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setNewUserName("");
+        setNewUserLastName("");
+        setNewUserEmail("");
+        setNewUserApartmentNumber("");
+        setNewUserPassword("");
+        setNewUserConfirmPassword("");
+        setError(""); // Clear errors
+        alert(`Používateľ ${newUserName} ${newUserLastName} bol úspešne pridaný!`);
+      } else {
+        setError(data.message || "Chyba pri pridávaní nového používateľa.");
+      }
+    } catch (error) {
+      setError("Chyba pri pridávaní nového používateľa.");
+    }
   };
 
   return (
@@ -89,12 +165,18 @@ function Settings() {
         <div className="settings-content">
           <div className="settings-box">
             <h1>Nastavenia</h1>
-            <form className="settings-form" onSubmit={handleSubmit}>
+            <form className="settings-form" onSubmit={handleEmailUpdate}>
               <div className="form-row">
                 <div className="form-group">
                   <div className="label-wrapper">
                     <label className="label-text">Aktuálny e-mail:</label>
-                    <div className="current-email">{currentEmail}</div>
+                    <input
+                      type="email"
+                      value={currentEmail}
+                      onChange={(e) => setCurrentEmail(e.target.value)} // Allow editing
+                      className="input-field"
+                      placeholder="Zadajte aktuálny e-mail"
+                    />
                   </div>
                   <div className="label-wrapper">
                     <label className="label-text new-email">Nový e-mail:</label>
@@ -107,6 +189,7 @@ function Settings() {
                     />
                   </div>
                 </div>
+
                 <div className="form-group">
                   <div className="label-wrapper">
                     <label className="label-text">Nové heslo:</label>
@@ -141,12 +224,15 @@ function Settings() {
                     placeholder="Zadajte staré heslo"
                   />
                 </div>
+                {error && <div className="error-message">{error}</div>}
                 <button type="submit" className="save-btn">
                   Uložiť
                 </button>
               </div>
             </form>
           </div>
+
+          {/* Add new user */}
           <div className="new-user-box">
             <h1>Pridať nového používateľa</h1>
             <form className="new-user-form" onSubmit={handleAddUser}>
@@ -210,8 +296,9 @@ function Settings() {
                   placeholder="Zopakujte heslo"
                 />
               </div>
+              {error && <div className="error-message">{error}</div>}
               <button type="submit" className="save-btn">
-                Pridať
+                Pridať používateľa
               </button>
             </form>
           </div>
