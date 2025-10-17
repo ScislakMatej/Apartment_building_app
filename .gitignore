@@ -1,0 +1,15 @@
+# Node 
+/node_modules
+/pm_projekt/node_modules
+
+# tajne kluce
+.env
+
+# Build a cache
+/build
+/dist
+/.cache
+/pm_projekt/.cache
+npm-debug.log
+yarn-error.log
+.DS_Store
