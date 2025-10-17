@@ -1,3 +1,4 @@
+
 na spustenie v pričunku src zapnut terminal a použiť príkaz node server.js(spusti a pripoji databazu). Otvoriť nový termial a zadať príkaz npm start.
 
 ak by boli problemy, je potrebne zadat tieto prikazy:
