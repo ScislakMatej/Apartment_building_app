@@ -7,7 +7,6 @@ const xlsx = require("xlsx");
 const fs = require("fs");
 
 
-
 // Načítanie environment premenných
 dotenv.config();
 
@@ -17,7 +16,9 @@ app.use(cors()); // CORS policy
 
 app.use(express.static(path.join(__dirname, 'src')));
 
+// Middleware pre kontrolu databázového pripojenia
 app.use((req, res, next) => {
+    // Ak pripojenie zlyhalo a 'pool' nie je definovaný, vráti chybu 500
     if (!pool) {
         return res.status(500).json({ message: 'Databázové pripojenie nie je dostupné' });
     }
@@ -48,7 +49,8 @@ sql.connect(dbConfig).then(p => {
     }
 }).catch(err => {
     console.error('Nepodarilo sa pripojiť k databáze:', err);
-    process.exit(1); // Koniec ak nepripojilo
+    // *** ZMENA: SERVER SA NEUKONČÍ, POOL ZOSTANE NEDOSTUPNÝ (null) ***
+    // process.exit(1); 
 });
 
 //* -------------------------------------PRIHLASENIE POUZIVATELA ----------------------------------- */
@@ -99,7 +101,7 @@ app.listen(PORT, () => {
 /* -------------------------------------VYKRESLENIE EXCEL SUBORU----------------------------------- 
 
 const { BlobServiceClient } = require("@azure/storage-blob");
-const connectionString = 'DefaultEndpointsProtocol=https;AccountName=pmprojectstorage;AccountKey=H/KdyRAkk+euJZTLJY7/1mgXVeFWp/lk3ZgQQvYJkm/NaqmucdmsKX0Rn6bBzAv4y9ShV6f9o3eO+AStWU1ArA==;EndpointSuffix=core.windows.net';
+const connectionString = 'DefaultEndpointsProtocol=https;AccountName=pmprojectstorage;AccountKey=H/KdyRAkk+euJZTLJY7/1mgV...'; // Skrátený connection string
 
 // Funkcia na stiahnutie súboru z Azure Storage
 async function downloadExcelFile() {
@@ -163,7 +165,6 @@ async function getClenoviaData() {
         return []; // Vráti prázdne pole v prípade chyby
     }
 }
-
 
 
 // Route na získanie údajov o členoch
@@ -235,7 +236,6 @@ app.put('/api/problems/:id', async (req, res) => {
 //* ------------------------------------- SETTING - uprava pouzivatela ----------------------------------- */
 
 
-// Route pre aktualizáciu používateľských údajov (email, heslo)
 // Route pre aktualizáciu používateľských údajov (email, heslo)
 app.put('/api/update-user', async (req, res) => {
     const { userId, oldPassword, currentEmail, newEmail, newPassword, confirmPassword } = req.body;
